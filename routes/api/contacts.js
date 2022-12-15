@@ -13,7 +13,10 @@ const { asyncWrapper } = require('../../helpers');
 
 const { validateBody } = require('../../middlewares');
 
-const { contacts } = require('../../schemas');
+const {
+    contact,
+    statusContact
+} = require('../../schemas');
 
 const router = express.Router();
 
@@ -21,13 +24,18 @@ router.get('/', asyncWrapper(listContacts));
 
 router.get('/:id', asyncWrapper(getById));
 
-router.post('/', validateBody(contacts), asyncWrapper(addContact));
+router.post('/',
+    validateBody(contact),
+    asyncWrapper(addContact));
 
 router.delete('/:id', asyncWrapper(removeContact));
 
-router.put('/:id', validateBody(contacts), asyncWrapper(updateContact));
+router.put('/:id',
+    validateBody(contact),
+    asyncWrapper(updateContact));
 
-router.patch('/:id/favorite', asyncWrapper(updateStatusContact));
-
+router.patch('/:id/favorite',
+    validateBody(statusContact),
+    asyncWrapper(updateStatusContact));
 
 module.exports = router;
