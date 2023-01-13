@@ -8,11 +8,8 @@ const {
     updateContact,
     updateStatusContact
 } = require('../../controllers/contacts');
-
 const { asyncWrapper } = require('../../helpers');
-
 const { validateBody } = require('../../middlewares');
-
 const { schemas } = require('../../models/contact');
 
 const router = express.Router();
