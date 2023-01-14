@@ -9,26 +9,35 @@ const {
     updateStatusContact
 } = require('../../controllers/contacts');
 const { asyncWrapper } = require('../../helpers');
-const { validateBody } = require('../../middlewares');
+const { validateBody, authenticate } = require('../../middlewares');
 const { schemas } = require('../../models/contact');
 
 const router = express.Router();
 
-router.get('/', asyncWrapper(listContacts));
+router.get('/',
+    authenticate,
+    asyncWrapper(listContacts));
 
-router.get('/:id', asyncWrapper(getById));
+router.get('/:id',
+    authenticate,
+    asyncWrapper(getById));
 
 router.post('/',
+    asyncWrapper(authenticate),
     validateBody(schemas.addSchema),
     asyncWrapper(addContact));
 
-router.delete('/:id', asyncWrapper(removeContact));
+router.delete('/:id',
+    authenticate,
+    asyncWrapper(removeContact));
 
 router.put('/:id',
+    authenticate,
     validateBody(schemas.addSchema),
     asyncWrapper(updateContact));
 
 router.patch('/:id/favorite',
+    authenticate,
     validateBody(schemas.updateFavoriteSchema),
     asyncWrapper(updateStatusContact));
 
