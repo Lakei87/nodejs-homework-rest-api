@@ -23,7 +23,7 @@ router.get('/:id',
     asyncWrapper(getById));
 
 router.post('/',
-    asyncWrapper(authenticate),
+    authenticate,
     validateBody(schemas.addSchema),
     asyncWrapper(addContact));
 

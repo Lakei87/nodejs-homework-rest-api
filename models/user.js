@@ -4,6 +4,7 @@ const Joi = require('joi');
 const { handleMongooseError } = require('../helpers');
 
 const emailRegexp = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+const subscriptionType = ["starter", "pro", "business"];
 
 // Mongoose schema
 const userSchema = new Schema(
@@ -20,7 +21,7 @@ const userSchema = new Schema(
         },
         subscription: {
             type: String,
-            enum: ["starter", "pro", "business"],
+            enum: subscriptionType,
             default: "starter"
         },
         token: String
@@ -31,15 +32,18 @@ const userSchema = new Schema(
 userSchema.post("save", handleMongooseError);
 
 // Joi schemas
-const registerAndLoginSchema = Joi.object(
-    {
-        password: Joi.string().min(7).max(20).required(),
-        email: Joi.string().pattern(emailRegexp).required(),
-    }
-);
+const registerAndLoginSchema = Joi.object({
+    password: Joi.string().min(7).max(20).required(),
+    email: Joi.string().pattern(emailRegexp).required(),
+});
+
+const updateSubscriptionSchema = Joi.object({
+    subscription: Joi.string().valid(...subscriptionType).required(),
+})
 
 const schemas = {
     registerAndLoginSchema,
+    updateSubscriptionSchema,
 };
 
 const User = model("user", userSchema);
