@@ -1,8 +1,14 @@
 const express = require("express");
 
-const { register, login, logout, current, updateSubscription } = require('../../controllers/auth');
+const {
+    register,
+    login,
+    logout,
+    current,
+    updateSubscription,
+    updateAvatar } = require('../../controllers/auth');
 const { asyncWrapper } = require('../../helpers');
-const { validateBody, authenticate } = require('../../middlewares');
+const { validateBody, authenticate, upload } = require('../../middlewares');
 const { schemas } = require('../../models/user');
 
 const router = express.Router();
@@ -26,6 +32,11 @@ router.get('/current',
 router.patch('/',
     authenticate,
     validateBody(schemas.updateSubscriptionSchema),
-    asyncWrapper(updateSubscription))
+    asyncWrapper(updateSubscription));
+
+router.patch('/avatars',
+    authenticate,
+    upload.single("avatar"),
+    asyncWrapper(updateAvatar));
 
 module.exports = router;
