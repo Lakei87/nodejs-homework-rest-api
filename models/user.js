@@ -3,6 +3,7 @@ const Joi = require('joi');
 
 const { handleMongooseError } = require('../helpers');
 
+// eslint-disable-next-line no-useless-escape
 const emailRegexp = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
 const subscriptionType = ["starter", "pro", "business"];
 
@@ -22,9 +23,15 @@ const userSchema = new Schema(
         subscription: {
             type: String,
             enum: subscriptionType,
-            default: "starter"
+            default: "starter",
         },
-        token: String
+        token: {
+            type: String,
+        },
+        avatarURL: {
+            type: String,
+            required: true,
+        },
     },
     { versionKey: false }
 );
