@@ -6,7 +6,8 @@ const {
     logout,
     current,
     updateSubscription,
-    updateAvatar } = require('../../controllers/auth');
+    updateAvatar, 
+    verificationToken} = require('../../controllers/auth');
 const { asyncWrapper } = require('../../helpers');
 const { validateBody, authenticate, upload } = require('../../middlewares');
 const { schemas } = require('../../models/user');
@@ -16,6 +17,13 @@ const router = express.Router();
 router.get('/login',
     validateBody(schemas.registerAndLoginSchema),
     asyncWrapper(login));
+    
+router.get('/current',
+    authenticate,
+    asyncWrapper(current));
+
+router.get('/verify/:verificationToken',
+    asyncWrapper(verificationToken));
 
 router.post('/register',
     validateBody(schemas.registerAndLoginSchema),
@@ -24,10 +32,6 @@ router.post('/register',
 router.post('/logout',
     authenticate,
     asyncWrapper(logout));
-
-router.get('/current',
-    authenticate,
-    asyncWrapper(current));
 
 router.patch('/',
     authenticate,
