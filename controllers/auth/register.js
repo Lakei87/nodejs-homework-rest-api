@@ -28,6 +28,18 @@ const register = async (req, res) => {
       avatarURL,
       verificationToken,
     });
+  
+  const msg = {
+    to: email,
+    from: 'monastyrskyis@gmail.com',
+    subject: 'Verification email',
+    html: `<a target="_blank" href='http://localhost:3000/api/users/verify/${verificationToken}'>Нажмите чтобы подтвердить свой email</a>`
+  };
+
+  sgMail
+    .send(msg)
+    .then(() => console.log("Email send"))
+    .catch(error => console.error(error))
       
   res.status(201).json({
     email: newUser.email,
