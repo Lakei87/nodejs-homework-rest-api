@@ -1,13 +1,10 @@
 const bcrypt = require('bcrypt');
 const gravatar = require('gravatar');
-const sgMail = require('@sendgrid/mail');
 const { nanoid } = require('nanoid');
 
 require('dotenv').config();
 const { User } = require('../../models/user');
-const { httpError } = require('../../helpers');
-
-sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+const { httpError, sendEmail } = require('../../helpers');
 
 const register = async (req, res) => {
   const { email, password } = req.body;
@@ -31,15 +28,11 @@ const register = async (req, res) => {
   
   const msg = {
     to: email,
-    from: 'monastyrskyis@gmail.com',
-    subject: 'Verification email',
-    html: `<a target="_blank" href='http://localhost:3000/api/auth/verify/${verificationToken}'>Нажмите чтобы подтвердить свой email</a>`
+    subject: 'Registration',
+    html: `<a target="_blank" href='http://localhost:3000/api/auth/verify/${verificationToken}'>Please, confirm your email address</a>`
   };
 
-  sgMail
-    .send(msg)
-    .then(() => console.log("Email send"))
-    .catch(error => console.error(error))
+  await sendEmail(msg);
       
   res.status(201).json({
     email: newUser.email,
