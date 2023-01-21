@@ -33,7 +33,7 @@ const register = async (req, res) => {
     to: email,
     from: 'monastyrskyis@gmail.com',
     subject: 'Verification email',
-    html: `<a target="_blank" href='http://localhost:3000/api/users/verify/${verificationToken}'>Нажмите чтобы подтвердить свой email</a>`
+    html: `<a target="_blank" href='http://localhost:3000/api/auth/verify/${verificationToken}'>Нажмите чтобы подтвердить свой email</a>`
   };
 
   sgMail
