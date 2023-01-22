@@ -3,12 +3,10 @@ const express = require("express");
 const {
     register,
     login,
-    logout,
-    current,
-    updateSubscription,
-    updateAvatar } = require('../../controllers/auth');
+    verificationToken,
+    reverificationToken} = require('../../controllers/auth');
 const { asyncWrapper } = require('../../helpers');
-const { validateBody, authenticate, upload } = require('../../middlewares');
+const { validateBody } = require('../../middlewares');
 const { schemas } = require('../../models/user');
 
 const router = express.Router();
@@ -17,26 +15,15 @@ router.get('/login',
     validateBody(schemas.registerAndLoginSchema),
     asyncWrapper(login));
 
+router.get('/verify/:verificationToken',
+    asyncWrapper(verificationToken));
+
 router.post('/register',
     validateBody(schemas.registerAndLoginSchema),
     asyncWrapper(register));
 
-router.post('/logout',
-    authenticate,
-    asyncWrapper(logout));
-
-router.get('/current',
-    authenticate,
-    asyncWrapper(current));
-
-router.patch('/',
-    authenticate,
-    validateBody(schemas.updateSubscriptionSchema),
-    asyncWrapper(updateSubscription));
-
-router.patch('/avatars',
-    authenticate,
-    upload.single("avatar"),
-    asyncWrapper(updateAvatar));
+router.post('/verify',
+    validateBody(schemas.reverificationTokenSchema),
+    asyncWrapper(reverificationToken));
 
 module.exports = router;
